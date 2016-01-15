@@ -1,16 +1,16 @@
-if (localStorage['showNSFW'] == undefined) {
-  localStorage['showNSFW'] = true
+if (localStorage['showBernie'] == undefined) {
+  localStorage['showBernie'] = true
 }
 
 document.onreadystatechange = function(e) {
   if (document.readyState != "complete") return
-  var showNSFWText = (localStorage['showNSFW'] == "true") ? 'on' : 'off'
+  var showBernieText = (localStorage['showBernie'] == "true") ? 'on' : 'off'
   showHide()
  
   var toggleLink = document.createElement("a")
   toggleLink.href = "javascript:void(0)"
-  toggleLink.id = "toggleNSFW"
-  toggleLink.innerText = "[NSFW " + showNSFWText + "]"
+  toggleLink.id = "toggleBernie"
+  toggleLink.innerText = "[Bernie " + showBernieText + "]"
   
   var separator = document.createElement("span")
   separator.className = "separator"
@@ -22,9 +22,9 @@ document.onreadystatechange = function(e) {
   
     
     
-  document.querySelector('#toggleNSFW').addEventListener('click', function(e) {
-    toggleNSFW()
-    this.innerText = '[NSFW ' + (localStorage['showNSFW'] == "true" ? 'on' : 'off') + ']'
+  document.querySelector('#toggleBernie').addEventListener('click', function(e) {
+    toggleBernie()
+    this.innerText = '[Bernie ' + (localStorage['showBernie'] == "true" ? 'on' : 'off') + ']'
   }, false)
 }
 
@@ -38,8 +38,8 @@ NodeList.prototype.map = function(fn) {
   return this
 }
 
-function toggleNSFW() {
-  localStorage['showNSFW'] = localStorage['showNSFW'] == "true" ? "false" : "true"
+function toggleBernie() {
+  localStorage['showBernie'] = localStorage['showBernie'] == "true" ? "false" : "true"
   showHide()
 }
 function hide(element) {
@@ -48,11 +48,15 @@ function hide(element) {
 function show(element) {
   if (element.style != undefined) return element.style["display"] = "inline"
 }
+function isBerniePost(element) {
+  return element.innerText.search(/bernie sanders/i) > 0;
+}
 function showHide() {
-  if (localStorage['showNSFW'] == 'true') {
-    document.querySelectorAll('.over18').map(show)
+  var bernies = [].slice.call(document.querySelectorAll('div.thing.link')).filter(isBerniePost);
+  if (localStorage['showBernie'] == 'true') {
+    bernies.map(show)
   } else {
-    document.querySelectorAll('.over18').map(hide)
+    bernies.map(hide)
   }
 }
 window.addEventListener('hashchange', showHide)
